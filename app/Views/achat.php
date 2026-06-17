@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <div id="saisir-achat">
-        <form>
+        <form class="app-panel">
             <h1>Produit</h1>
+            <button onclick="resetTable(document.getElementById('table-achat'))" id="resetBtn">Reset</button>
             <select name="produit" id="produit">
                 <option value="" id="selection-produit">Sélectionnez un produit</option>
                 <?php foreach ($produits as $produit): ?>
@@ -26,7 +28,7 @@
         </form>
     </div>
     <div>
-        <table id="table-achat">
+        <table id="table-achat" class="app-table">
             <thead>
                 <tr>
                     <th>Libellé</th>

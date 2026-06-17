@@ -1,0 +1,139 @@
+/* ==========================================================
+   TOKENS
+   ========================================================== */
+:root {
+  --ardoise-900: #1F2933; /* texte principal / fond du header */
+  --ardoise-600: #3E4C59; /* texte secondaire */
+  --ardoise-300: #CBD2D9; /* bordures discrètes */
+  --brume-100:   #F5F7FA; /* fond de page */
+  --canal-500:   #2B6CB0; /* accent primaire (boutons, liens) */
+  --canal-100:   #EBF4FF; /* accent clair (focus / hover) */
+  --alerte-500:  #E53E3E; /* erreurs / qtte = 0 */
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+}
+
+body {
+  background: var(--brume-100);
+  font-family: var(--font-body);
+  color: var(--ardoise-900);
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+.app-header {
+  background: var(--ardoise-900);
+  color: var(--brume-100);
+}
+
+.app-header__mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--canal-500);
+  color: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.app-header__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.app-header__meta {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ardoise-300);
+}
+
+/* ==========================================================
+   LAYOUT PRINCIPAL (flex)
+   ========================================================== */
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================================
+   PANELS (tableau + formulaire)
+   ========================================================== */
+.app-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(31, 41, 51, 0.08);
+}
+
+.app-panel--table {
+  flex: 2 1 0%;
+  border-left: 4px solid var(--canal-500);
+}
+
+.app-panel--form {
+  flex: 1 1 0%;
+  min-width: 280px;
+  border-left: 4px solid var(--ardoise-300);
+}
+
+.app-panel__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--ardoise-900);
+}
+
+@media (max-width: 991.98px) {
+  .app-panel--table,
+  .app-panel--form {
+    flex: 1 1 100%;
+  }
+}
+
+/* ==========================================================
+   TABLEAU
+   ========================================================== */
+.app-table td,
+.app-table th {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.app-table thead th {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ardoise-600);
+  border-bottom: 2px solid var(--ardoise-300);
+}
+
+/* ==========================================================
+   FORMULAIRE / BOUTON
+   ========================================================== */
+.app-btn-primary {
+  background: var(--canal-500);
+  color: #fff;
+  border: none;
+}
+
+.app-btn-primary:hover {
+  background: #234e8a;
+  color: #fff;
+}
+
+.app-btn-primary:focus-visible {
+  outline: 2px solid var(--canal-100);
+  outline-offset: 2px;
+}
+
+/* Bouton submit bloqué quand qtte = 0 (cf. changeMax.js) */
+.app-btn-primary:disabled {
+  background: var(--ardoise-300);
+  color: var(--ardoise-600);
+  cursor: not-allowed;
+}

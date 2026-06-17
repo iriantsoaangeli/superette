@@ -69,4 +69,41 @@ function ajouterLigne(tableau, input, qtte) {
     // Ajout dans le <tbody> s'il existe, sinon directement dans le tableau
     const corps = (tableau.tBodies && tableau.tBodies[0]) ? tableau.tBodies[0] : tableau;
     corps.appendChild(ligne);
+    sauvegarderTableau(tableau);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tableau = document.getElementById('table-achat');
+    restaurerTableau(tableau);
+    document.getElementById('resetBtn').addEventListener('click', function () {
+        event.preventDefault();
+    });
+});
+
+// Sauvegarde après ajout d'une ligne
+function sauvegarderTableau(tableau) {
+    const lignes = [...tableau.querySelectorAll('tbody tr')].map(tr =>
+        [...tr.children].map(td => td.textContent)
+    );
+    localStorage.setItem('lignesCommande', JSON.stringify(lignes));
+}
+
+// Restauration au chargement de la page
+function restaurerTableau(tableau) {
+    const data = JSON.parse(localStorage.getItem('lignesCommande') || '[]');
+    const corps = tableau.tBodies[0];
+    data.forEach(cellules => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = cellules.map(c => `<td>${c}</td>`).join('');
+        corps.appendChild(tr);
+    });
+}
+
+
+function resetTable(tableau) {
+    localStorage.removeItem('lignesCommande');
+    const corps = tableau.tBodies[0];
+    while (corps.firstChild) {
+        corps.removeChild(corps.firstChild);
+    }
 }

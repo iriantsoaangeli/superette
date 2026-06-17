@@ -59,3 +59,4 @@ document.getElementById('produit').addEventListener('change', function () {
 document.getElementById("saisir-confirmer").addEventListener("click", function () {
     event.preventDefault(); 
 });
+
