@@ -41,6 +41,7 @@
                     <th>Prix</th>
                     <th>Quantité</th>
                     <th>Total</th>
+                    <th style="display:none">ids</th>
                 </tr>
             </thead>
             <tbody id="table-body">
