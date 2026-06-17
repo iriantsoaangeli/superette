@@ -14,17 +14,34 @@
             <select name="produit" id="produit">
                 <option value="" id="selection-produit">Sélectionnez un produit</option>
                 <?php foreach ($produits as $produit): ?>
-                    <option value="<?= $produit['id'] ?>" qtte="<?= $produit['quantite_stock'] ?>">
-                        <?= $produit['designation'] ?></option>
+                    <option value="<?= $produit['id'] ?>" qtte="<?= $produit['quantite_stock'] ?>" prix="<?= $produit['prix'] ?>"><?= $produit['designation'] ?></option>
+                    <?= $produit['designation'] ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <input type="number" name="qtte" id="qtte" min="1" placeholder="Quantité">
-            <input type="submit" onclick="ajouterLigne()" value="Ajouter" id="saisir-confirmer">
+            <input type="submit"
+                onclick="ajouterLigne(document.getElementById('table-achat'), document.getElementById('produit'), document.getElementById('qtte'))"
+                value="Ajouter" id="saisir-confirmer">
         </form>
     </div>
-    <div id="table-achat">
-
+    <div>
+        <table id="table-achat">
+            <thead>
+                <tr>
+                    <th>Libellé</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Les lignes seront ajoutées ici par JavaScript -->
+            </tbody>
+        </table>
     </div>
 </body>
+
 </html>
+<script src="/js/achat-table.js"></script>
 <script src="/js/achat.js"></script>
