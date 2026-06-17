@@ -48,6 +48,9 @@ function ajouterLigne(tableau, input, qtte) {
     // Création de la ligne et de ses cellules
     const ligne = document.createElement('tr');
 
+    const idProduit = selectedOption.value; // Stocke l'id du produit dans un attribut personnalisé de la ligne
+
+
     const tdLibelle = document.createElement('td');
     tdLibelle.textContent = libelle;
 
@@ -60,13 +63,104 @@ function ajouterLigne(tableau, input, qtte) {
     const tdTotal = document.createElement('td');
     tdTotal.textContent = total;
 
+    const tdId = document.createElement('td');
+    tdId.textContent = idProduit;
+    tdId.style.display = 'none'; // Masque la colonne de l'id
+
     ligne.appendChild(tdLibelle);
     ligne.appendChild(tdPrix);
     ligne.appendChild(tdQtte);
     ligne.appendChild(tdTotal);
+    ligne.appendChild(tdId);
 
     selectedOption.setAttribute('selected', selectedQtte + quantite); // Met à jour l'attribut "selected" de l'option sélectionnée   
     // Ajout dans le <tbody> s'il existe, sinon directement dans le tableau
     const corps = (tableau.tBodies && tableau.tBodies[0]) ? tableau.tBodies[0] : tableau;
     corps.appendChild(ligne);
+    refactoTable(tableau); // Consolidation des lignes avec le même id
+    sauvegarderTableau(tableau);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tableau = document.getElementById('table-achat');
+    restaurerTableau(tableau);
+    document.getElementById('resetBtn').addEventListener('click', function () {
+        event.preventDefault();
+    });
+});
+
+// Sauvegarde après ajout d'une ligne
+function sauvegarderTableau(tableau) {
+    const lignes = [...tableau.querySelectorAll('tbody tr')].map(tr =>
+        [...tr.children].map(td => td.textContent)
+    );
+    localStorage.setItem('lignesCommande', JSON.stringify(lignes));
+}
+
+// Restauration au chargement de la page
+function restaurerTableau(tableau) {
+    const data = JSON.parse(localStorage.getItem('lignesCommande') || '[]');
+    const corps = tableau.tBodies[0];
+    data.forEach(cellules => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = cellules.map(c => `<td>${c}</td>`).join('');
+        corps.appendChild(tr);
+    });
+}
+
+
+function resetTable(tableau) {
+    localStorage.removeItem('lignesCommande');
+    const corps = tableau.tBodies[0];
+    while (corps.firstChild) {
+        corps.removeChild(corps.firstChild);
+    }
+}
+
+
+function refactoTable(tableau) {
+  const tbody = tableau.tBodies[0] || tableau;
+  const lignes = Array.from(tbody.rows);
+
+  // Map id -> { libelle, pu, qtte, id }
+  const groupes = new Map();
+
+  lignes.forEach(ligne => {
+    const cellules = ligne.cells;
+
+    const libelle = cellules[0].textContent.trim();
+    const pu = parseFloat(cellules[1].textContent) || 0;
+    const qtte = parseInt(cellules[2].textContent, 10) || 0;
+    const id = cellules[cellules.length - 1].textContent.trim();
+
+    if (groupes.has(id)) {
+      // Id déjà rencontré : on additionne la qtte
+      groupes.get(id).qtte += qtte;
+    } else {
+      // Nouvel id : on initialise le groupe
+      groupes.set(id, { libelle, pu, qtte, id });
+    }
+  });
+
+  // Vide le tableau pour le reconstruire
+  tbody.innerHTML = '';
+
+  const lignesConsolidees = [];
+
+  groupes.forEach(groupe => {
+    const total = groupe.pu * groupe.qtte;
+    lignesConsolidees.push({ ...groupe, total });
+
+    const ligne = document.createElement('tr');
+    ligne.innerHTML = `
+      <td>${groupe.libelle}</td>
+      <td>${groupe.pu}</td>
+      <td>${groupe.qtte}</td>
+      <td>${total}</td>
+      <td>${groupe.id}</td>
+    `;
+    tbody.appendChild(ligne);
+  });
+
+  return lignesConsolidees;
 }
