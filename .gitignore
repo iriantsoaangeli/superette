@@ -1,0 +1,5 @@
+/writable/debugbar
+*.log
+/writable/logs/*
+/writable/session
+.env
