@@ -9,6 +9,12 @@
 </head>
 
 <body>
+    <?php if (!empty($caisse_nom)): ?>
+        <div id="caisse-selectionnee">
+            <strong>Caisse choisie :</strong> <?= esc($caisse_nom) ?>
+        </div>
+    <?php endif; ?>
+
     <div id="saisir-achat">
         <form class="app-panel">
             <h1>Produit</h1>

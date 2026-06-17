@@ -24,7 +24,7 @@
             <?php if (!empty($caisses) && is_array($caisses)): ?>
                 <?php foreach ($caisses as $caisse): ?>
                     <option value="<?= esc($caisse['id']) ?>">
-                        <?= esc($caisse['nom_caisse']) ?> (<?= esc($caisse['statut']) ?>)
+                        <?= esc($caisse['nom_caisse']) ?>
                     </option>
                 <?php endforeach; ?>
             <?php else: ?>

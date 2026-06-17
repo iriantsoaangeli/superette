@@ -2,31 +2,26 @@
 
 namespace App\Controllers;
 
-use \Config\Services;
 use App\Models\CaisseModel;
 use App\Models\MouvementCaisseModel;
 class CaisseController extends BaseController
 {
-    protected $session;
     protected $caisseModel;
     protected $mouvementCaisseModel;
 
     public function __construct()
     {
-        $this->session = Services::session();
         $this->caisseModel = new CaisseModel();
         $this->mouvementCaisseModel = new MouvementCaisseModel();
     }
 
-    // 1. Écran d'accueil
     public function index()
     {
         // caisse ouverte
-        $data['caisses'] = $this->caisseModel->where('statut', 'ouverte')->findAll();
+        $data['caisses'] = $this->caisseModel->findAllOuvertes();
         return view('accueil', $data);
     }
 
-    // 2. Traitement du formulaire et mise en session
     public function selectionner()
     {
         $caisseId = $this->request->getPost('caisse_id');
@@ -37,5 +32,11 @@ class CaisseController extends BaseController
             return redirect()->to('/achats');
         }
         return redirect()->to('/')->with('error', 'Caisse invalide ou introuvable.');
+    }
+
+    public function deconnexion()
+    {
+        $this->session->remove(['caisse_id', 'caisse_nom']);
+        return redirect()->to('/');
     }
 }
