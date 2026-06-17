@@ -13,4 +13,9 @@ class CaisseModel extends Model
     protected $useSoftDeletes   = false;
     protected $allowedFields    = ['nom_caisse', 'statut'];
     protected $useTimestamps = false;
+
+    public function findAllOuvertes()
+    {
+        return $this->where('statut', 'ouverte')->findAll();
+    }
 }

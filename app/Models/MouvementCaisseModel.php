@@ -17,9 +17,6 @@ class MouvementCaisseModel extends Model
 
     protected $useTimestamps = false;
 
-    /**
-     * Exemple de méthode personnalisée pour récupérer les mouvements avec les détails de la caisse
-     */
     public function getMouvementsAvecCaisse()
     {
         return $this->select('mouvement_caisse.*, caisse.nom_caisse')
