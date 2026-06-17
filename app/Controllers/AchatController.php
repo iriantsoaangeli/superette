@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\AchatModel;
 use App\Models\ProduitModel;
 use App\Models\MouvementCaisseModel;
+use \Config\Database;
 
 class AchatController extends BaseController
 {
@@ -22,7 +23,7 @@ class AchatController extends BaseController
     public function achats()
     {
         if (!$this->session->has('caisse_id')) {
-            return redirect()->to('/')->with('error', 'Veuillez sélectionner une caisse avant de continuer.');
+            return redirect()->to('/accueil')->with('error', 'Selectionne une caisse');
         }
         $data = [
             'caisse_id'   => $this->session->get('caisse_id'),
@@ -40,7 +41,7 @@ class AchatController extends BaseController
     public function enregistrerAchat()
     {
         if (!$this->session->has('caisse_id')) {
-            return redirect()->to('/')->with('error', 'Session expirée.');
+            return redirect()->to('/accueil')->with('error', 'Session expirée.');
         }
 
         $produitModel = new ProduitModel();
@@ -57,7 +58,7 @@ class AchatController extends BaseController
 
         $montantTotal = $produit['prix'] * $quantite;
 
-        $db = \Config\Database::connect();
+        $db = Database::connect();
         $db->transStart();
 
         $idAchat = $achatModel->insert([

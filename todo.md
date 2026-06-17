@@ -59,4 +59,26 @@ php spark db:seed SupermarketSeeder
 1. Table utilisee : `mouvement_caisse`.
 2. Cle primaire : `id`.
 3. Champs autorises : `caisse_id`, `montant`, `date`, `type`, `achat_id`.
-4. Methode existante : `getMouvementsAvecCaisse()`.
+4. Methode : `getMouvementsAvecCaisse()`.
+
+### `AchatModel`
+
+1. table utilisee : `achat`.
+2. Cle primaire : `id`.
+3. Champs autorises : `produit_id`, `caisse_id`, `quantite`, `date`, `mvm_id`.
+4. Methode : `getAchatsAvecDetails`.
+
+### `ProduitModel`
+
+1. table utilise : `produit`.
+2. Cle primaire : `id`.
+3. Champs autorises : `designation`, `prix`, `quantite_stock`, `created_at`.
+4. Methode : `findAll`
+
+### `AchatController`
+
+- Methode : *achats()*, *saisirAchat()*
+
+### `CaisseController`
+
+- Methode : *index()*, *selectionner()*

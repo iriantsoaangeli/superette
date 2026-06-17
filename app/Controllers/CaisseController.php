@@ -17,6 +17,10 @@ class CaisseController extends BaseController
 
     public function index()
     {
+        if (!$this->session->has('connecte')) {
+            return redirect()->to('/');
+        }
+
         // caisse ouverte
         $data['caisses'] = $this->caisseModel->findAllOuvertes();
         return view('accueil', $data);
@@ -31,12 +35,12 @@ class CaisseController extends BaseController
             $this->session->set('caisse_nom', $caisse['nom_caisse']);
             return redirect()->to('/achats');
         }
-        return redirect()->to('/')->with('error', 'Caisse invalide ou introuvable.');
+        return redirect()->to('/accueil')->with('error', 'Caisse invalide ou introuvable.');
     }
 
-    public function deconnexion()
-    {
-        $this->session->remove(['caisse_id', 'caisse_nom']);
-        return redirect()->to('/');
-    }
+    // public function deconnexion()
+    // {
+    //     $this->session->remove(['caisse_id', 'caisse_nom']);
+    //     return redirect()->to('/');
+    // }
 }

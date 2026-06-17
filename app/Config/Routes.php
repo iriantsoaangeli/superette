@@ -5,7 +5,9 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'CaisseController::index');
+$routes->get('/', 'AuthController::login');
+$routes->post('connexion', 'AuthController::connecter');
+$routes->get('accueil', 'CaisseController::index');
 $routes->post('caisse/selectionner', 'CaisseController::selectionner');
 $routes->get('achats', 'AchatController::achats');
 $routes->get('achat/saisir', 'AchatController::saisirAchat');

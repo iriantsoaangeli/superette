@@ -20,7 +20,8 @@
             <select name="produit" id="produit">
                 <option value="" id="selection-produit">Sélectionnez un produit</option>
                 <?php foreach ($produits as $produit): ?>
-                    <option value="<?= $produit['id'] ?>" qtte="<?= $produit['quantite_stock'] ?>" prix="<?= $produit['prix'] ?>"><?= $produit['designation'] ?></option>
+                    <option value="<?= $produit['id'] ?>" qtte="<?= $produit['quantite_stock'] ?>"
+                        prix="<?= $produit['prix'] ?>"><?= $produit['designation'] ?></option>
                     <?= $produit['designation'] ?>
                     </option>
                 <?php endforeach; ?>
@@ -45,6 +46,8 @@
                 <!-- Les lignes seront ajoutées ici par JavaScript -->
             </tbody>
         </table>
+
+        <button type="button" id="cloturer-achat">Clôturer achat</button>
     </div>
 </body>
 

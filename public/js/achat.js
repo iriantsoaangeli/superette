@@ -59,3 +59,14 @@ document.getElementById('produit').addEventListener('change', function () {
 document.getElementById("saisir-confirmer").addEventListener("click", function () {
     event.preventDefault(); 
 });
+
+document.getElementById("cloturer-achat").addEventListener("click", function () {
+    document.getElementById("table-body").innerHTML = "";
+
+    document.querySelectorAll("#produit option").forEach(function (option) {
+        option.setAttribute("selected", "0");
+    });
+
+    document.getElementById("produit").value = "";
+    document.getElementById("qtte").value = "";
+});
