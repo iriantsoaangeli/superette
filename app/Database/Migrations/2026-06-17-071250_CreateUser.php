@@ -10,20 +10,22 @@ class CreateUser extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type' => 'INTEGER',
+                'type'           => 'INTEGER',
                 'auto_increment' => true,
             ],
             'username' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type'       => 'VARCHAR',
+                'constraint' => 100,
+                'unique'     => true,
             ],
             'password_hash' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
             ],
             'role' => [
-                'enum' => ['admin', 'caissier'],
-                'default' => 'caissier',
+                'type'       => 'VARCHAR',
+                'constraint' => 20,
+                'default'    => 'caissier',
             ],
         ]);
         $this->forge->addKey('id', true);
@@ -35,4 +37,3 @@ class CreateUser extends Migration
         $this->forge->dropTable('users');
     }
 }
-

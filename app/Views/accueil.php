@@ -3,38 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil - Sélection de la Caisse</title>
+    <title>Choisir une caisse — Superette</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <h1>Gestion de la Caisse - Supermarché</h1>
-    <p>Veuillez sélectionner la caisse sur laquelle vous allez travailler aujourd'hui.</p>
+<header id="app-header">
+    <a href="<?= site_url('accueil') ?>" class="header-brand">
+        <span class="brand-dot"></span> Superette
+    </a>
+    <div class="header-user">
+        👤 <?= esc(session()->get('user_nom') ?? 'Caissier') ?>
+    </div>
+    <div class="header-right">
+        <a href="<?= site_url('/') ?>" class="btn-choisir-caisse">🚪 Déconnexion</a>
+    </div>
+</header>
 
-    <?php if (session()->getFlashdata('error')) : ?>
-        <div style="color: red; margin-bottom: 15px;">
-            <?= session()->getFlashdata('error') ?>
-        </div>
+<div class="page-wrapper">
+    <h2 class="page-title">🖥️ Sélection de la caisse</h2>
+
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="flash-error">⚠️ <?= session()->getFlashdata('error') ?></div>
     <?php endif; ?>
 
-    <form action="<?= site_url('caisse/selectionner') ?>" method="post">
-        <?= csrf_field() ?> <label for="caisse_id">Choisir une caisse active :</label>
-        <select name="caisse_id" id="caisse_id" required>
-            <option value="">-- Sélectionnez une caisse --</option>
-            
-            <?php if (!empty($caisses) && is_array($caisses)): ?>
-                <?php foreach ($caisses as $caisse): ?>
-                    <option value="<?= esc($caisse['id']) ?>">
-                        <?= esc($caisse['nom_caisse']) ?>
-                    </option>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <option value="" disabled>Aucune caisse ouverte disponible</option>
-            <?php endif; ?>
-            
-        </select>
+    <div class="card">
+        <div class="card__title">Caisses disponibles</div>
 
-        <button type="submit">Ouvrir la session de caisse</button>
-    </form>
+        <?php if (!empty($caisses) && is_array($caisses)): ?>
+            <form action="<?= site_url('caisse/selectionner') ?>" method="post" id="form-caisse">
+                <?= csrf_field() ?>
+                <input type="hidden" name="caisse_id" id="caisse_id_input" value="">
+
+                <div class="caisse-grid">
+                    <?php foreach ($caisses as $caisse): ?>
+                        <div class="caisse-card"
+                             onclick="selectionnerCaisse(<?= $caisse['id'] ?>, this)">
+                            <div class="caisse-icon">🖥️</div>
+                            <div class="caisse-name"><?= esc($caisse['nom_caisse']) ?></div>
+                            <div class="caisse-status">● Ouverte</div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <div style="margin-top:1.5rem; display:flex; justify-content:flex-end;">
+                    <button type="submit" class="btn btn-success" id="btn-valider" disabled>
+                        ✅ Ouvrir la session de caisse
+                    </button>
+                </div>
+            </form>
+        <?php else: ?>
+            <div class="flash-warning">⚠️ Aucune caisse ouverte disponible.</div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
+function selectionnerCaisse(id, el) {
+    document.querySelectorAll('.caisse-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('caisse_id_input').value = id;
+    document.getElementById('btn-valider').disabled = false;
+}
+</script>
 
 </body>
 </html>

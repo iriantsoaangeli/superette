@@ -164,3 +164,144 @@ function refactoTable(tableau) {
 
   return lignesConsolidees;
 }
+
+
+/* ─────────────────────────────────────────────────────────────────
+   achat.js
+   ─────────────────────────────────────────────────────────────────
+   Gère :
+   • changeMax  — limite la quantité selon le stock disponible
+   • Toast      — notification légère en bas à droite
+   • cloturerAchat — AJAX POST → /achat/cloturer
+                     Vérifie PU × qté === total sur chaque ligne
+                     Si KO  → affiche le message d'erreur serveur
+                     Si OK  → vide localStorage + redirige saisirAchat
+   ───────────────────────────────────────────────────────────────── */
+
+/* ── 1. changeMax ────────────────────────────────────────────── */
+function changeMax(ref, input) {
+    const selectedOption = ref.options[ref.selectedIndex];
+    const qtte = parseInt(selectedOption.getAttribute('qtte'), 10) || 0;
+
+    input.max = qtte;
+    if (input.value !== '' && parseInt(input.value, 10) > qtte) {
+        input.value = qtte;
+    }
+
+    const form = ref.closest('form');
+    if (form) {
+        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+        if (submitBtn) submitBtn.disabled = (qtte === 0);
+    }
+}
+
+document.getElementById('produit').addEventListener('change', function () {
+    const input = document.getElementById('qtte');
+    if (input) changeMax(this, input);
+    input.value = '';
+});
+
+document.getElementById('saisir-confirmer').addEventListener('click', function (event) {
+    event.preventDefault();
+});
+
+
+/* ── 2. Toast ────────────────────────────────────────────────── */
+function showToast(message, type = 'error', duree = 5000) {
+    const toast = document.getElementById('toast');
+    toast.textContent  = message;
+    toast.className    = `toast-${type}`;
+    toast.style.display = 'block';
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => { toast.style.display = 'none'; }, duree);
+}
+
+
+/* ── 3. Lecture du tableau ───────────────────────────────────── */
+/**
+ * Retourne un tableau d'objets { produit_id, libelle, pu, quantite, total }
+ * en lisant chaque <tr> du tbody.
+ * Colonnes supposées : 0-libellé  1-pu  2-quantite  3-total  4-produit_id (caché)
+ */
+function lireLignesTableau() {
+    const tbody  = document.querySelector('#table-achat tbody');
+    const lignes = [];
+
+    tbody.querySelectorAll('tr').forEach(tr => {
+        const cells = tr.cells;
+        if (cells.length < 5) return;                    // ligne incomplète
+
+        lignes.push({
+            produit_id : cells[4].textContent.trim(),
+            libelle    : cells[0].textContent.trim(),
+            pu         : parseFloat(cells[1].textContent) || 0,
+            quantite   : parseInt(cells[2].textContent, 10) || 0,
+            total      : parseFloat(cells[3].textContent) || 0
+        });
+    });
+
+    return lignes;
+}
+
+/**
+ * Calcule la somme des totaux des lignes (arrondi 2 décimales).
+ */
+function calculerTotalGeneral(lignes) {
+    return Math.round(lignes.reduce((acc, l) => acc + l.total, 0) * 100) / 100;
+}
+
+
+/* ── 4. Clôture AJAX ─────────────────────────────────────────── */
+document.getElementById('cloturer-achat').addEventListener('click', async function () {
+
+
+    const lignes = lireLignesTableau();
+
+    if (lignes.length === 0) {
+        showToast('Le panier est vide. Ajoutez au moins un produit.', 'error');
+        return;
+    }
+
+    const totalGeneral = calculerTotalGeneral(lignes);
+
+    // Désactive le bouton le temps de la requête
+    this.disabled   = true;
+    this.textContent = 'Traitement…';
+
+    try {
+        const response = await fetch(AJAX_CLOTURER_URL, {
+            method  : 'POST',
+            headers : {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ lignes, totalGeneral })
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            // ── Vérification KO ──────────────────────────────────
+            showToast('❌ ' + data.message, 'error');
+        } else {
+            // ── Vérification OK + Insertion réussie ──────────────
+            showToast('✅ Achat clôturé avec succès !', 'success', 2000);
+
+            // Vide le localStorage
+            localStorage.removeItem('lignesCommande');
+
+            // Redirige vers la page de saisie après un bref délai
+            setTimeout(() => {
+                window.location.href = '/achats';
+            }, 1200);
+            resetTable(document.getElementById('table-achat')); // Vide le tableau immédiatement pour l'utilisateur
+        }
+
+    } catch (err) {
+        showToast('❌ Erreur réseau ou serveur inattendu.', 'error');
+        console.error('cloturerAchat error:', err);
+    } finally {
+        this.disabled   = false;
+        this.textContent = 'Clôturer achat';
+    }
+});

@@ -11,7 +11,7 @@ class AchatModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $allowedFields    = ['produit_id', 'caisse_id', 'quantite', 'date', 'mvm_id'];
+    protected $allowedFields    = ['produit_id', 'caisse_id', 'quantite_achetee', 'date_achat'];
     protected $useTimestamps    = false;
 
     public function getAchatsAvecDetails()

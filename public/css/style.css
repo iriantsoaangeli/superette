@@ -1,139 +1,645 @@
 /* ==========================================================
-   TOKENS
+   TOKENS — Superette Design System
    ========================================================== */
-:root {
-  --ardoise-900: #1F2933; /* texte principal / fond du header */
-  --ardoise-600: #3E4C59; /* texte secondaire */
-  --ardoise-300: #CBD2D9; /* bordures discrètes */
-  --brume-100:   #F5F7FA; /* fond de page */
-  --canal-500:   #2B6CB0; /* accent primaire (boutons, liens) */
-  --canal-100:   #EBF4FF; /* accent clair (focus / hover) */
-  --alerte-500:  #E53E3E; /* erreurs / qtte = 0 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
+:root {
+  /* Palette */
+  --ardoise-900: #1a2332;
+  --ardoise-700: #2d3a4a;
+  --ardoise-600: #3e4c59;
+  --ardoise-400: #6b7a8d;
+  --ardoise-300: #c8d0da;
+  --ardoise-100: #f0f2f5;
+  --brume-50:    #f8fafc;
+  --blanc:       #ffffff;
+
+  --vert-600:    #16a34a;
+  --vert-500:    #22c55e;
+  --vert-100:    #dcfce7;
+
+  --canal-700:   #1d4ed8;
+  --canal-500:   #3b82f6;
+  --canal-100:   #dbeafe;
+
+  --alerte-600:  #dc2626;
+  --alerte-500:  #ef4444;
+  --alerte-100:  #fee2e2;
+
+  --orange-500:  #f97316;
+  --orange-100:  #ffedd5;
+
+  /* Typography */
   --font-display: 'Space Grotesk', sans-serif;
   --font-body:    'Inter', sans-serif;
   --font-mono:    'IBM Plex Mono', monospace;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,.12);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 }
+
+/* ==========================================================
+   RESET & BASE
+   ========================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 
 body {
-  background: var(--brume-100);
+  background: var(--ardoise-100);
   font-family: var(--font-body);
   color: var(--ardoise-900);
+  min-height: 100vh;
 }
+
+a { color: var(--canal-500); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
 /* ==========================================================
-   HEADER
+   HEADER GLOBAL
    ========================================================== */
-.app-header {
+#app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: var(--ardoise-900);
-  color: var(--brume-100);
+  color: var(--blanc);
+  padding: 0 1.5rem;
+  height: 58px;
+  gap: 1rem;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.app-header__mark {
+#app-header .header-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  font-size: 1.05rem;
+  letter-spacing: .03em;
+  color: var(--blanc);
+  text-decoration: none;
+}
+
+#app-header .header-brand .brand-dot {
+  width: 8px; height: 8px;
+  background: var(--vert-500);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#app-header .header-user {
+  font-size: .875rem;
+  color: var(--ardoise-300);
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+#app-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.caisse-badge {
+  background: var(--vert-600);
+  color: #fff;
+  border-radius: 20px;
+  padding: .25rem .85rem;
+  font-size: .8rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+.caisse-badge.no-caisse { background: var(--alerte-500); }
+
+.btn-choisir-caisse {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,.35);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: .3rem .9rem;
+  font-size: .8rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background .18s, border-color .18s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  white-space: nowrap;
+}
+
+.btn-choisir-caisse:hover {
+  background: rgba(255,255,255,.12);
+  border-color: #fff;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* ==========================================================
+   PAGE WRAPPER
+   ========================================================== */
+.page-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 3rem;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ardoise-900);
+  margin-bottom: 1.5rem;
+}
+
+/* ==========================================================
+   CARD / PANEL
+   ========================================================== */
+.card {
+  background: var(--blanc);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+}
+
+.card + .card { margin-top: 1.25rem; }
+
+.card__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ardoise-700);
+  margin-bottom: 1.1rem;
+  padding-bottom: .65rem;
+  border-bottom: 2px solid var(--ardoise-100);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Legacy alias */
+.app-panel {
+  background: var(--blanc);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+}
+
+/* ==========================================================
+   FORMS
+   ========================================================== */
+.form-group {
+  margin-bottom: 1.1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--ardoise-600);
+  margin-bottom: .4rem;
+  letter-spacing: .01em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: .6rem .85rem;
+  border: 1.5px solid var(--ardoise-300);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: .925rem;
+  color: var(--ardoise-900);
+  background: var(--brume-50);
+  transition: border-color .18s, box-shadow .18s;
+  appearance: none;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--canal-500);
+  box-shadow: 0 0 0 3px var(--canal-100);
+  background: var(--blanc);
+}
+
+input::placeholder { color: var(--ardoise-400); }
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .85rem center;
+  padding-right: 2.2rem;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   BUTTONS
+   ========================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  padding: .6rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background .18s, transform .1s, box-shadow .18s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
   background: var(--canal-500);
   color: #fff;
-  padding: 0.25rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
+}
+.btn-primary:hover { background: var(--canal-700); color: #fff; text-decoration: none; }
+
+.btn-success {
+  background: var(--vert-600);
+  color: #fff;
+}
+.btn-success:hover { background: #15803d; color: #fff; }
+
+.btn-danger {
+  background: var(--alerte-500);
+  color: #fff;
+}
+.btn-danger:hover { background: var(--alerte-600); }
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--ardoise-300);
+  color: var(--ardoise-700);
+}
+.btn-outline:hover { background: var(--ardoise-100); border-color: var(--ardoise-400); }
+
+.btn-sm {
+  padding: .35rem .85rem;
+  font-size: .82rem;
 }
 
-.app-header__title {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 600;
+.btn:disabled {
+  background: var(--ardoise-300);
+  color: var(--ardoise-600);
+  cursor: not-allowed;
+  transform: none;
 }
 
-.app-header__meta {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--ardoise-300);
-}
-
-/* ==========================================================
-   LAYOUT PRINCIPAL (flex)
-   ========================================================== */
-.app-main {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* ==========================================================
-   PANELS (tableau + formulaire)
-   ========================================================== */
-.app-panel {
-  background: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(31, 41, 51, 0.08);
-}
-
-.app-panel--table {
-  flex: 2 1 0%;
-  border-left: 4px solid var(--canal-500);
-}
-
-.app-panel--form {
-  flex: 1 1 0%;
-  min-width: 280px;
-  border-left: 4px solid var(--ardoise-300);
-}
-
-.app-panel__title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  color: var(--ardoise-900);
-}
-
-@media (max-width: 991.98px) {
-  .app-panel--table,
-  .app-panel--form {
-    flex: 1 1 100%;
-  }
-}
+/* Legacy aliases */
+.app-btn-primary { background: var(--canal-500); color: #fff; border: none; padding: .6rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; }
+.app-btn-primary:hover { background: var(--canal-700); }
+.app-btn-primary:disabled { background: var(--ardoise-300); color: var(--ardoise-600); cursor: not-allowed; }
 
 /* ==========================================================
-   TABLEAU
+   TABLE
    ========================================================== */
-.app-table td,
-.app-table th {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  vertical-align: middle;
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
 }
 
 .app-table thead th {
   font-family: var(--font-body);
   font-weight: 600;
-  color: var(--ardoise-600);
-  border-bottom: 2px solid var(--ardoise-300);
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ardoise-400);
+  padding: .65rem 1rem;
+  border-bottom: 2px solid var(--ardoise-100);
+  text-align: left;
+  background: var(--brume-50);
+}
+
+.app-table tbody tr {
+  border-bottom: 1px solid var(--ardoise-100);
+  transition: background .12s;
+}
+.app-table tbody tr:hover { background: var(--canal-100); }
+.app-table tbody tr:last-child { border-bottom: none; }
+
+.app-table td {
+  padding: .7rem 1rem;
+  font-family: var(--font-mono);
+  font-size: .875rem;
+  color: var(--ardoise-900);
+  vertical-align: middle;
+}
+
+.table-total-row td {
+  font-weight: 700;
+  background: var(--ardoise-100);
+  border-top: 2px solid var(--ardoise-300);
+  font-family: var(--font-mono);
 }
 
 /* ==========================================================
-   FORMULAIRE / BOUTON
+   FLASH MESSAGES
    ========================================================== */
-.app-btn-primary {
+.flash-error,
+.flash-success,
+.flash-warning {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .75rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: .9rem;
+  font-weight: 500;
+  margin: .75rem 0;
+}
+.flash-error   { background: var(--alerte-100);  color: var(--alerte-600);  border-left: 4px solid var(--alerte-500); }
+.flash-success { background: var(--vert-100);    color: var(--vert-600);    border-left: 4px solid var(--vert-500); }
+.flash-warning { background: var(--orange-100);  color: #9a3412;            border-left: 4px solid var(--orange-500); }
+
+/* ==========================================================
+   TOAST (AJAX)
+   ========================================================== */
+#toast {
+  display: none;
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  min-width: 280px;
+  max-width: 440px;
+  padding: .85rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-size: .9rem;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#toast.toast-error   { background: var(--alerte-100); color: var(--alerte-600); border-left: 4px solid var(--alerte-500); }
+#toast.toast-success { background: var(--vert-100);   color: var(--vert-600);   border-left: 4px solid var(--vert-500); }
+
+/* ==========================================================
+   LOGIN PAGE
+   ========================================================== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--ardoise-900) 0%, var(--ardoise-700) 100%);
+  padding: 1rem;
+}
+
+.login-card {
+  background: var(--blanc);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.login-logo .logo-icon {
+  width: 54px; height: 54px;
+  background: var(--ardoise-900);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: .75rem;
+}
+
+.login-logo h1 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ardoise-900);
+}
+
+.login-logo p {
+  font-size: .85rem;
+  color: var(--ardoise-400);
+  margin-top: .25rem;
+}
+
+.login-divider {
+  border: none;
+  border-top: 1px solid var(--ardoise-100);
+  margin: 1.25rem 0;
+}
+
+.login-card .btn-primary { width: 100%; margin-top: .5rem; padding: .75rem; font-size: .95rem; }
+
+.login-hint {
+  margin-top: 1.25rem;
+  background: var(--ardoise-100);
+  border-radius: var(--radius-sm);
+  padding: .75rem 1rem;
+  font-size: .8rem;
+  color: var(--ardoise-600);
+}
+
+.login-hint strong { font-family: var(--font-mono); color: var(--ardoise-900); }
+
+/* ==========================================================
+   ACCUEIL / CHOIX CAISSE
+   ========================================================== */
+.caisse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.caisse-card {
+  background: var(--blanc);
+  border: 2px solid var(--ardoise-300);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color .18s, box-shadow .18s, transform .15s;
+  text-align: center;
+}
+
+.caisse-card:hover {
+  border-color: var(--canal-500);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.caisse-card.selected {
+  border-color: var(--vert-500);
+  background: var(--vert-100);
+}
+
+.caisse-card .caisse-icon {
+  font-size: 2rem;
+  margin-bottom: .5rem;
+}
+
+.caisse-card .caisse-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .95rem;
+  color: var(--ardoise-900);
+}
+
+.caisse-card .caisse-status {
+  font-size: .78rem;
+  color: var(--vert-600);
+  font-weight: 500;
+  margin-top: .25rem;
+}
+
+/* ==========================================================
+   PAGE ACHAT — layout
+   ========================================================== */
+#saisir-achat .app-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .75rem;
+  margin-bottom: 1.25rem;
+}
+
+#saisir-achat .app-panel h1 {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ardoise-700);
+  margin-bottom: .25rem;
+}
+
+#saisir-achat select {
+  flex: 2 1 200px;
+}
+
+#saisir-achat input[type="number"] {
+  flex: 0 0 120px;
+  width: 120px;
+}
+
+#saisir-achat input[type="submit"],
+#saisir-achat button {
+  flex: 0 0 auto;
+}
+
+#resetBtn {
+  background: transparent;
+  border: 1.5px solid var(--ardoise-300);
+  color: var(--ardoise-400);
+  border-radius: var(--radius-sm);
+  padding: .35rem .75rem;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .18s;
+  margin-left: auto;
+}
+#resetBtn:hover { background: var(--alerte-100); color: var(--alerte-600); border-color: var(--alerte-500); }
+
+#saisir-confirmer {
   background: var(--canal-500);
   color: #fff;
   border: none;
+  border-radius: var(--radius-sm);
+  padding: .6rem 1.1rem;
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: background .18s;
+}
+#saisir-confirmer:hover { background: var(--canal-700); }
+#saisir-confirmer:disabled { background: var(--ardoise-300); color: var(--ardoise-600); cursor: not-allowed; }
+
+.table-wrapper {
+  background: var(--blanc);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
-.app-btn-primary:hover {
-  background: #234e8a;
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-top: 2px solid var(--ardoise-100);
+  background: var(--brume-50);
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.total-display {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ardoise-900);
+}
+
+.total-display span {
+  color: var(--vert-600);
+  font-size: 1.25rem;
+}
+
+#cloturer-achat {
+  background: var(--vert-600);
   color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .65rem 1.5rem;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .18s;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
 }
+#cloturer-achat:hover { background: #15803d; }
+#cloturer-achat:disabled { background: var(--ardoise-300); cursor: not-allowed; }
 
-.app-btn-primary:focus-visible {
-  outline: 2px solid var(--canal-100);
-  outline-offset: 2px;
-}
-
-/* Bouton submit bloqué quand qtte = 0 (cf. changeMax.js) */
-.app-btn-primary:disabled {
-  background: var(--ardoise-300);
-  color: var(--ardoise-600);
-  cursor: not-allowed;
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 640px) {
+  #app-header { padding: 0 1rem; }
+  .page-wrapper { padding: 1rem .75rem 2rem; }
+  .caisse-grid { grid-template-columns: 1fr 1fr; }
+  #saisir-achat .app-panel { flex-direction: column; }
+  #saisir-achat select,
+  #saisir-achat input[type="number"] { width: 100%; flex: auto; }
+  .table-footer { flex-direction: column; align-items: stretch; }
+  #cloturer-achat { justify-content: center; }
 }
